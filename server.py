@@ -18,9 +18,9 @@ class ChompServer:
         for client in self.clients:
             client.send(message.encode())
 
-    def broadcast_board(self, board):
+    def broadcast_board(self):
         for client in self.clients:
-            client.send(("BOARD " + str(board)).encode())
+            client.send(("BOARD " + str(self.board)).encode())
 
     def send_message_to(self, message, client):
         client.send(message.encode())
@@ -32,7 +32,7 @@ class ChompServer:
                 if data.startswith("SIZE"):
                     _, width, height = data.split(" ")
                     self.board = Board(int(width), int(height))
-                    self.broadcast_board(self.board)
+                    self.broadcast_board()
                     time.sleep(0.1)
                     self.send_message_to("YOUR_TURN", client)
                 if data.startswith("MOVE"):
@@ -40,7 +40,7 @@ class ChompServer:
                     print(move)
                     if self.current_player == client and self.board.is_valid_move(move):
                         self.board.make_move(move)
-                        self.broadcast_board(self.board)
+                        self.broadcast_board()
                         if self.board.is_game_over():
                             self.broadcast("GAME_OVER")
                             time.sleep(0.1)
@@ -93,7 +93,7 @@ class ChompServer:
                 self.send_message_to("CHOOSE_BOARD_SIZE", self.current_player)
 
             elif len(self.clients) > 2:
-                client_socket.send("FULL".encode())
+                self.send_message_to("FULL", client_socket)
                 self.remove_client(client_socket)
                 continue
 
