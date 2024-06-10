@@ -1,3 +1,4 @@
+import random
 import socket
 import threading
 import time
@@ -88,7 +89,7 @@ class ChompServer:
                 self.send_message_to("WAIT", client_socket)
 
             if len(self.clients) == 2:
-                self.current_player = self.clients[0]
+                self.current_player = random.choice(self.clients)
                 self.broadcast("GAME_START")
                 self.send_message_to("CHOOSE_BOARD_SIZE", self.current_player)
 

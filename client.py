@@ -53,7 +53,11 @@ class Client:
             self.make_move()
 
     def choose_board_size(self):
-        size = input("Enter board size (width,height): ")
+        size = input(
+            "Enter board size (width,height) or press enter for default (4x5): "
+        )
+        if size == "":
+            size = "4,5"
         while not size.replace(",", "").isdigit():
             print(
                 "Invalid input. Please enter two numerical values separated by a comma."
