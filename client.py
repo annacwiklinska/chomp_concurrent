@@ -58,10 +58,20 @@ class Client:
         )
         if size == "":
             size = "4,5"
-        while not size.replace(",", "").isdigit():
-            print(
-                "Invalid input. Please enter two numerical values separated by a comma."
-            )
+        while True:
+            if not size.replace(",", "").isdigit():
+                print(
+                    "Invalid input. Please enter two numerical values separated by a comma."
+                )
+            elif (
+                int(size.split(",")[0]) < 1
+                or int(size.split(",")[0]) > 20
+                or int(size.split(",")[1]) < 1
+                or int(size.split(",")[1]) > 20
+            ):
+                print("Invalid input. Each dimension must be between 1 and 20.")
+            else:
+                break
             size = input("Enter board size: ")
         message = f"SIZE {size.replace(',', ' ')}"
         self.client_socket.send(message.encode())
