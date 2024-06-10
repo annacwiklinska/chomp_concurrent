@@ -42,12 +42,13 @@ class Client:
             print("Game over!")
         elif data == "LOST":
             print("You lost!")
-            self.close()
-            exit()
+            self.ask_play_again()
         elif data == "WIN":
             print("You won!")
-            self.close()
-            exit()
+            self.ask_play_again()
+        elif data == "DISCONNECTED":
+            print("The other player disconnected.")
+            self.ask_play_again()
         elif data == "INVALID":
             print("Invalid move! Try again.")
             self.make_move()
@@ -97,6 +98,18 @@ class Client:
             )
             move = input("Enter your move: ")
         self.send_move(move)
+
+    def ask_play_again(self):
+        print("Do you wan to play again? (y/n)")
+        play_again = input()
+        while play_again not in ["y", "n"]:
+            print("Invalid input. Please enter 'y' or 'n'.")
+            play_again = input()
+        if play_again == "y":
+            self.client_socket.send("AGAIN YES".encode())
+        else:
+            self.client_socket.send("AGAIN NO".encode())
+            exit()
 
 
 if __name__ == "__main__":

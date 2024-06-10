@@ -3,7 +3,6 @@ class Board:
         self.width = min(width, 20)
         self.height = min(height, 20)
         self.fields = [[True for _ in range(width)] for _ in range(height)]
-        self.fields[0][0] = "X"  # poison
 
     def __str__(self):
         return "\n".join(
