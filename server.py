@@ -6,15 +6,6 @@ import time
 from board import Board
 
 
-def sleep_after(func):
-    def wrapper(*args, **kwargs):
-        result = func(*args, **kwargs)
-        time.sleep(0.1)
-        return result
-
-    return wrapper
-
-
 class ChompServer:
     def __init__(self, host="localhost", port=5555):
         self.host = host
@@ -25,17 +16,14 @@ class ChompServer:
         self.lock = threading.Lock()
         self.want_to_play_again = []
 
-    # @sleep_after
     def broadcast(self, message):
         for client in self.clients:
             client.send(message.encode())
 
-    # @sleep_after
     def broadcast_board(self):
         for client in self.clients:
             client.send(("BOARD " + str(self.board)).encode())
 
-    # @sleep_after
     def send_message_to(self, message, client):
         client.send(message.encode())
 
@@ -88,7 +76,6 @@ class ChompServer:
                         self.want_to_play_again.append(client)
                         if len(self.want_to_play_again) == 2:
                             self.board = Board()
-                            # self.broadcast_board()
                             self.current_player = random.choice(self.clients)
                             self.broadcast("GAME_START")
                             time.sleep(0.1)
